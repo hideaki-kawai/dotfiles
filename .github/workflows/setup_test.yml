@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   # push:
   #   branches:
-  #     -main
+  #     - main
 
 jobs:
   make:
@@ -21,9 +21,11 @@ jobs:
         run: make
       
       - name: Confirm Python version
-        run: pyenv install 3.12.7
-        run: python --version
+        run: |
+          pyenv install 3.12.7
+          python --version
 
       - name: Confirm Node version
-        run: nvm install 22
-        run: node -v
+        run: |
+          nvm install 22
+          node -v
