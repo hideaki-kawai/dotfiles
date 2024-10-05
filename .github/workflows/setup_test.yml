@@ -16,6 +16,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Add execution permissions to scripts
+        run: |
+          chmod +x .bin/init.sh
+          chmod +x .bin/macos_custom_settings.sh
+          chmod +x .bin/brew.sh
 
       - name: Setup dotfiles
         run: make
