@@ -1,0 +1,28 @@
+name: setup test
+on:
+  push:
+    branches:
+      -main
+
+jobs:
+  make:
+    runs-on: macos-14
+
+    defaults:
+      run:
+        shell: zsh
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup dotfiles
+        run: make
+      
+      - name: Confirm Python version
+        run: pyenv install 3.12.7
+        run: python --version
+
+      - name: Confirm Node version
+        run: nvm install 22
+        run: node -v
