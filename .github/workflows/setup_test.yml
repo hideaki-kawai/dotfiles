@@ -11,7 +11,7 @@ jobs:
 
     defaults:
       run:
-        shell: zsh
+        shell: /bin/zsh
 
     steps:
       - name: Checkout
