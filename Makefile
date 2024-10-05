@@ -1,5 +1,5 @@
 # 全実行
-all: init link defaults brew
+all: init macos_custom_settings brew
 
 # init.shを実行
 init:
@@ -8,7 +8,7 @@ init:
 	@echo "\033[0;34mDone.\033[0m"
 
 # macos_defaults.shを実行
-defaults:
+macos_custom_settings:
 	@echo "\033[0;34mRun macos_defaults.sh\033[0m"
 	@.bin/macos_custom_settings.sh
 	@echo "\033[0;32mDone.\033[0m"
