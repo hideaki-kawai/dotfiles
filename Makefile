@@ -10,7 +10,7 @@ init:
 # macos_defaults.shを実行
 defaults:
 	@echo "\033[0;34mRun macos_defaults.sh\033[0m"
-	@.bin/macos_defaults.sh
+	@.bin/macos_custom_settings.sh
 	@echo "\033[0;32mDone.\033[0m"
 
 # brew.shを実行
