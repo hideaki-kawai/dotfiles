@@ -31,6 +31,9 @@ defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 # バッテリーのパーセンテージを表示する
 defaults write com.apple.menuextra.battery ShowPercent -string "YES"
 
+# バッテリー駆動時にディスプレイを5分後にオフに設定
+sudo pmset -b displaysleep 5
+
 # Dockの変更を適用
 killall Dock
 
