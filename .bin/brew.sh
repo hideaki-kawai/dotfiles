@@ -9,4 +9,4 @@ fi
 # インストールコマンド
 brew install --cask google-chrome google-japanese-ime clipy scroll-reverser visual-studio-code notion displaylink iterm2 sourcetree docker logi-options-plus
 
-brew install nvm pyenv awscli postman tree
+brew install nvm pyenv awscli tree
