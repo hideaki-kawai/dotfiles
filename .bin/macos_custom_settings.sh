@@ -46,11 +46,11 @@ defaults write com.apple.BezelServices kDimTime -int 30
 ###############################################################################
 # Dock
 ###############################################################################
-# Dock サイズを小さめ、自動的に隠す
+# Dock を小さめ、自動的に隠す
 defaults write com.apple.dock tilesize -int 32
 defaults write com.apple.dock autohide -bool true
 
-# dockutil がなければ Homebrew からインストール（brew は init.sh で PATH 済み）
+# dockutil がなければ Homebrew からインストールする（brew PATH は init.sh 側で設定済み）
 if ! command -v dockutil >/dev/null 2>&1; then
   if command -v brew >/dev/null 2>&1; then
     brew install dockutil
@@ -70,26 +70,31 @@ fi
 ###############################################################################
 # メニューバー / バッテリー
 ###############################################################################
-# バッテリー残量（％）表示を有効化（OS により反映方法が変わる場合あり）
 defaults write com.apple.menuextra.battery ShowPercent -string "YES"
 
 ###############################################################################
 # 省電力（sudo 必須）
 ###############################################################################
-# バッテリー時は 5 分でディスプレイをオフにする
+# バッテリー時は 5 分でディスプレイをオフ
 sudo pmset -b displaysleep 5
 
 # 電源接続時はディスプレイを切らない
 sudo pmset -c displaysleep 0
 
 ###############################################################################
-# （任意）Apple 日本語 IM: ¥ → \ にする（必要なら有効化）
+# Option + L でスリープするショートカットを設定する
 ###############################################################################
-# Google 日本語入力の詳細設定は手動を推奨（安定自動化が難しい）
-# defaults write com.apple.inputmethod.Kotoeri JIMPrefCharacterForYenKey -string "\\"
-# defaults write com.apple.inputmethod.Kotoeri JIMPrefCharacterForBackslashKey -string "\\"
-# killall "JapaneseIM" >/dev/null 2>&1 || true
-# killall "Kotoeri"   >/dev/null 2>&1 || true
+# SymbolicHotKeys ID 7 = "スリープ"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 7 \
+    "<dict><key>enabled</key><true/>\
+    <key>value</key><dict>\
+        <key>type</key><string>standard</string>\
+        <key>parameters</key><array>\
+            <integer>76</integer> \
+            <integer>2048</integer> \
+            <integer>1048576</integer> \
+        </array>\
+    </dict></dict>"
 
 ###############################################################################
 # 反映
