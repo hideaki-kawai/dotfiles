@@ -51,3 +51,5 @@ make brew
 - 権限付与/再起動（Logi Options+/Docker など）
 
 - Chrome 既定ブラウザの確認ダイアログで「Chrome を使用」を選択
+
+- Logi Options+ などのドライバ系も通常の cask からインストールする（追加 tap は不要）
