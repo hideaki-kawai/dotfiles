@@ -1,42 +1,53 @@
 name: setup test
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
 
 jobs:
   make:
-    runs-on: macos-14
+    runs-on: macos-latest # 最新の macOS ランナーを使う
 
     defaults:
       run:
         shell: bash
 
     steps:
-      - name: Checkout
+      - name: リポジトリをチェックアウトする
         uses: actions/checkout@v4
-      
-      - name: Add execution permissions to scripts
+
+      - name: スクリプトに実行権限を付与する
         run: |
           chmod +x .bin/init.sh
           chmod +x .bin/macos_custom_settings.sh
           chmod +x .bin/brew.sh
 
-      - name: Setup dotfiles
+      - name: dotfiles セットアップを実行する
         run: make
-      
-      - name: Confirm Python version
+
+      - name: Python（pyenv）を確認する
         run: |
           export PYENV_ROOT="$HOME/.pyenv"
           export PATH="$PYENV_ROOT/bin:$PATH"
           eval "$(pyenv init --path)"
-          pyenv install 3.12.0
+          pyenv install -s 3.12.0
+          pyenv global 3.12.0
           python --version
 
-      - name: Confirm Node version
+      - name: Node（Volta）を確認する
         run: |
-          export NVM_DIR="$HOME/.nvm"
-          [ -s "$(brew --prefix nvm)/nvm.sh" ] && \. "$(brew --prefix nvm)/nvm.sh"
-          nvm install 22
+          export PATH="$HOME/.volta/bin:$PATH"
+          volta install node
           node -v
+
+      - name: CLI の PATH を確認する
+        run: |
+          which brew
+          which volta
+          which pyenv
+          which gh
+          which ngrok
+          which aws
+          which tree
+          which dockutil

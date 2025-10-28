@@ -1,19 +1,23 @@
-# 全実行
+# ------------------------------
+# Makefile
+# ------------------------------
+
+# Run everything
 all: init macos_custom_settings brew
 
-# init.shを実行
+# 1) Homebrew install & PATH
 init:
 	@echo "\033[0;34mRun init.sh\033[0m"
 	@.bin/init.sh
 	@echo "\033[0;34mDone.\033[0m"
 
-# macos_defaults.shを実行
+# 2) macOS defaults & power settings
 macos_custom_settings:
-	@echo "\033[0;34mRun macos_defaults.sh\033[0m"
+	@echo "\033[0;34mRun macos_custom_settings.sh\033[0m"
 	@.bin/macos_custom_settings.sh
 	@echo "\033[0;32mDone.\033[0m"
 
-# brew.shを実行
+# 3) Install apps (brew/cask) + volta/pyenv PATH setup
 brew:
 	@echo "\033[0;34mRun brew.sh\033[0m"
 	@.bin/brew.sh
