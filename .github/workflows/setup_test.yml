@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: リポジトリをチェックアウトする
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: スクリプトに実行権限を付与する
         run: |
