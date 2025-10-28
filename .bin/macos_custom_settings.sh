@@ -82,21 +82,6 @@ sudo pmset -b displaysleep 5
 sudo pmset -c displaysleep 0
 
 ###############################################################################
-# Option + L でスリープするショートカットを設定する
-###############################################################################
-# SymbolicHotKeys ID 7 = "スリープ"
-defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 7 \
-    "<dict><key>enabled</key><true/>\
-    <key>value</key><dict>\
-        <key>type</key><string>standard</string>\
-        <key>parameters</key><array>\
-            <integer>76</integer> \
-            <integer>2048</integer> \
-            <integer>1048576</integer> \
-        </array>\
-    </dict></dict>"
-
-###############################################################################
 # 反映
 ###############################################################################
 killall Dock            >/dev/null 2>&1 || true
