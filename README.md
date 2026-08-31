@@ -1,4 +1,4 @@
-# dotfiles (2025 Edition)
+# dotfiles (2026 Edition)
 
 Mac を買い替えた直後に、**一発でいつもの環境**に整えるためのセットです。  
 Apple Silicon 想定。
@@ -6,8 +6,16 @@ Apple Silicon 想定。
 ## できること
 - macOS の初期設定（トラックパッド/キーボード/Dock/省電力 ほか）
 - Homebrew のインストール & PATH 設定
-- GUI/CLI アプリのインストール（brew/cask）
-- `volta`（Node）、`pyenv`（Python）のセットアップ & PATH 設定
+- `Brewfile` に基づく GUI/CLI アプリの一括インストール（`brew bundle install`）
+- [`mise`](https://mise.jdx.dev/) のセットアップ & `mise/config.toml` に基づく
+  Node / Python / Go / Java / gh / aws / gcloud などの一括インストール
+  （旧 `volta`（Node）/ `pyenv`（Python）構成から移行済み）
+
+### Brewfile / mise/config.toml のメンテナンス
+- アプリを追加/削除したら、手で `Brewfile` を編集するより
+  `brew bundle dump --force` で今の実インストール状態から再生成する方が
+  ズレが起きにくい（cask 名の変更なども自動で拾える）
+- 同様に `mise/config.toml` はいつでも `mise use -g <tool>@<version>` で更新できる
 
 > サインイン系（Slack/Chatwork/Lark などのログイン）は自動化しません。
 
@@ -48,8 +56,10 @@ make brew
   - スペース → 常に半角
   - 数字 → 常に半角
 
-- 権限付与/再起動（Logi Options+/Docker など）
+- 権限付与/再起動（Docker など）
 
 - Chrome 既定ブラウザの確認ダイアログで「Chrome を使用」を選択
 
-- Logi Options+ などのドライバ系も通常の cask からインストールする（追加 tap は不要）
+- 上記の「システム設定」を開く操作のあとで `make macos_custom_settings` を
+  もう一度実行する。トラックパッド/キーボードまわりの設定は、後から該当パネルを
+  開くとそのパネルのキャッシュ値で上書きされて元に戻ることがあるため。

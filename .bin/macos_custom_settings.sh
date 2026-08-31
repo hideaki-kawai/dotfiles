@@ -7,17 +7,28 @@ if [ "$(uname)" != "Darwin" ]; then
   exit 1
 fi
 
+# 注意: トラックパッド/キーボード系の設定は、後から「システム設定」の該当
+# パネル（トラックパッド/キーボード等）を開くと、そのパネルが持つキャッシュ値で
+# 上書きされて元に戻ることがある（macOS の既知の挙動）。
+# README の「実行後に手動で行うこと」（入力ソース追加など）を行った後は、
+# 念のためこのスクリプト（make macos_custom_settings）をもう一度実行すること。
+
 ###############################################################################
 # トラックパッド / マウス
 ###############################################################################
 # 1本指タップでクリックを有効化（ユーザー + ログイン画面）
+# 内蔵トラックパッドは com.apple.AppleMultitouchTrackpad、Bluetooth トラックパッドは
+# com.apple.driver.AppleBluetoothMultitouch.trackpad と、機種によりドメインが異なるため両方に書く
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults write com.apple.AppleMultitouchTrackpad Clicking -bool true
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
 
 # 右クリックを右下タップに設定
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick -int 2
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick -bool true
+defaults write com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick -int 2
+defaults write com.apple.AppleMultitouchTrackpad TrackpadRightClick -bool true
 defaults -currentHost write NSGlobalDomain com.apple.trackpad.trackpadCornerClickBehavior -int 1
 defaults -currentHost write NSGlobalDomain com.apple.trackpad.enableSecondaryClick -bool true
 
@@ -39,9 +50,10 @@ defaults write NSGlobalDomain com.apple.keyboard.fnState -bool true
 # 文頭自動大文字化を無効化
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
 
-# キーボードバックライトを 30 秒で自動オフ
-defaults write com.apple.BezelServices kDim -bool true
-defaults write com.apple.BezelServices kDimTime -int 30
+# キーボードバックライトの自動オフ設定は com.apple.BezelServices 経由の
+# defaults write では現行 macOS（Sequoia 以降）で機能しなくなったため廃止。
+# 「システム設定 → キーボード → 操作がないときにキーボードのバックライトを
+# オフにする」から手動設定する。
 
 ###############################################################################
 # Dock
@@ -59,12 +71,13 @@ if ! command -v dockutil >/dev/null 2>&1; then
   fi
 fi
 
-# 左側の Dock アイコンを固定（Finder / Launchpad / システム設定）
+# 左側の Dock アイコンを固定（Finder / システム設定）
+# macOS Tahoe (26) 以降 Launchpad は Dock.app に統合され
+# /System/Applications/Launchpad.app が存在しなくなったため対象から除外。
 if command -v dockutil >/dev/null 2>&1; then
   dockutil --remove all || true
   dockutil --add "/System/Library/CoreServices/Finder.app" --position 1 || true
-  dockutil --add "/System/Applications/Launchpad.app" --position 2 || true
-  dockutil --add "/System/Applications/System Settings.app" --position 3 || true
+  dockutil --add "/System/Applications/System Settings.app" --position 2 || true
 fi
 
 ###############################################################################

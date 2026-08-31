@@ -7,6 +7,10 @@ if [ "$(uname)" != "Darwin" ]; then
   exit 1
 fi
 
+# cwd に依存せず mise/config.toml を参照できるようにリポジトリルートを解決
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 echo "Homebrew を更新してパッケージをインストールする ..."
 
 # CI 環境判定
@@ -27,73 +31,30 @@ if [ "$(uname -m)" = "arm64" ]; then
 fi
 
 ###############################################################################
-# GUI アプリ（cask）
+# CLI / GUI アプリ一式（Brewfile 参照）
+# CI でのスキップ判定は Brewfile 側（Ruby の ENV["CI"] 判定）に集約済み
 ###############################################################################
-brew install --cask google-chrome
-# CI は IME/GUI 系をスキップ（ヘッドレス・権限制約のため）
-if ! is_ci; then
-  brew install --cask google-japanese-ime
-fi
-
-brew install --cask iterm2
-brew install --cask clipy
-brew install --cask sourcetree
-
-# Docker Desktop は CI ではスキップ
-if ! is_ci; then
-  brew install --cask docker
-fi
-
-brew install --cask scroll-reverser
-brew install --cask rectangle
-brew install --cask cursor
-brew install --cask alt-tab
-brew install --cask slack
-brew install --cask chatwork
-brew install --cask lark
-
-# Logi Options+ は再起動必須・初回起動前はエラーノイズが出やすいので CI ではスキップ
-if ! is_ci; then
-  brew install --cask logi-options-plus || true
-  echo "※ logi-options+ はインストール後に再起動が必要。再起動後に初回起動して権限付与する"
-fi
-
-###############################################################################
-# CLI ツール
-###############################################################################
-brew install tree
-brew install volta
-brew install pyenv
-brew install gh
-brew install ngrok
-brew install awscli
-brew install dockutil
+brew bundle install --file="$REPO_ROOT/Brewfile"
 
 ###############################################################################
 # PATH / 初期化（冪等）
 ###############################################################################
 # Homebrew の PATH は init.sh で設定済み
 
-# Volta を PATH に追加（shims を使うため）
-volta setup || true
-
-# pyenv をログインシェル / 対話シェルで初期化（重複追記しない）
-if ! grep -q 'export PYENV_ROOT=' "$HOME/.zprofile" 2>/dev/null; then
-  {
-    echo 'export PYENV_ROOT="$HOME/.pyenv"'
-    echo 'export PATH="$PYENV_ROOT/bin:$PATH"'
-    echo 'eval "$(pyenv init --path)"'
-  } >> "$HOME/.zprofile"
-fi
-if ! grep -q 'pyenv init -' "$HOME/.zshrc" 2>/dev/null; then
-  echo 'eval "$(pyenv init -)"' >> "$HOME/.zshrc"
+# mise をログインシェル / 対話シェルで初期化（重複追記しない）
+# https://mise.jdx.dev/installing-mise.html
+if ! grep -q 'mise activate zsh' "$HOME/.zshrc" 2>/dev/null; then
+  echo 'eval "$(mise activate zsh)"' >> "$HOME/.zshrc"
 fi
 
 # 現在のシェルにも反映して、直後にコマンドが使えるようにする
-# shellcheck disable=SC1090
-[ -f "$HOME/.zprofile" ] && . "$HOME/.zprofile" || true
-# shellcheck disable=SC1090
-[ -f "$HOME/.zshrc" ] && . "$HOME/.zshrc" || true
+eval "$(mise activate zsh)" || true
+
+# node/python/go/gh/aws/gcloud など、このリポジトリで管理しているツール一式を
+# mise の共有バージョン定義（mise/config.toml）から一括インストール
+mkdir -p "$HOME/.config/mise"
+cp "$REPO_ROOT/mise/config.toml" "$HOME/.config/mise/config.toml"
+mise install
 
 ###############################################################################
 # 既定ブラウザを Chrome に切り替える（初回起動時に OS の確認ダイアログが出る）

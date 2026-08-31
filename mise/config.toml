@@ -1,0 +1,26 @@
+# mise の共有バージョン定義（グローバル）
+# https://mise.jdx.dev/configuration.html
+#
+# セットアップ手順:
+#   1. .bin/brew.sh が自動でこのファイルを ~/.config/mise/config.toml にコピーする
+#   2. `mise install` で以下のツールを一括インストール
+#
+# 個別プロジェクトでバージョンを変えたい場合は、そのリポジトリ直下に
+# mise.toml / .tool-versions / .node-version / .python-version などを置けば
+# グローバル設定より優先される。
+[tools]
+act = "latest"
+aws = "latest"
+gcloud = "latest"
+gh = "latest"
+go = "latest"
+gradle = "latest"
+infisical = "latest"
+java = "temurin-21"
+node = "latest"
+pulumi = "latest"
+python = "latest"
+stripe = "latest"
+tbls = "latest"
+turso = "latest"
+uv = "latest"

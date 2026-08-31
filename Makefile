@@ -17,7 +17,7 @@ macos_custom_settings:
 	@.bin/macos_custom_settings.sh
 	@echo "\033[0;32mDone.\033[0m"
 
-# 3) Install apps (brew/cask) + volta/pyenv PATH setup
+# 3) Install apps (brew/cask) + mise setup (node/python/go/gh/aws/gcloud ...)
 brew:
 	@echo "\033[0;34mRun brew.sh\033[0m"
 	@.bin/brew.sh

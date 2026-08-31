@@ -26,28 +26,23 @@ jobs:
       - name: dotfiles セットアップを実行する
         run: make
 
-      - name: Python（pyenv）を確認する
+      - name: mise 管理のツールを確認する
         run: |
-          export PYENV_ROOT="$HOME/.pyenv"
-          export PATH="$PYENV_ROOT/bin:$PATH"
-          eval "$(pyenv init --path)"
-          pyenv install -s 3.12.0
-          pyenv global 3.12.0
-          python --version
-
-      - name: Node（Volta）を確認する
-        run: |
-          export PATH="$HOME/.volta/bin:$PATH"
-          volta install node
+          eval "$(mise activate bash)"
+          mise doctor
           node -v
+          python3 --version
+          go version
+          gh --version
+          aws --version
 
       - name: CLI の PATH を確認する
         run: |
+          eval "$(mise activate bash)"
           which brew
-          which volta
-          which pyenv
+          which mise
           which gh
-          which ngrok
           which aws
           which tree
           which dockutil
+          which ngrok || true
